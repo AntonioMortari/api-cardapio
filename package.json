@@ -3,11 +3,23 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js",
+    "start:dev": "nodemon src/index.ts --watch /src -e ts",
+    "build": "tsc"
+  },
   "devDependencies": {
+    "@types/mongoose": "^5.11.97",
     "@types/node": "^20.11.0",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
     "@typescript-eslint/parser": "^6.18.1",
+    "dotenv": "^16.3.1",
     "eslint": "^8.56.0",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "mongose": "^0.0.2-security"
   }
 }
