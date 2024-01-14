@@ -4,11 +4,11 @@ import { StatusCodes } from 'http-status-codes'
 import { FoodValidator } from './FoodValidator'
 
 
-class FoodController extends FoodValidator{
+class FoodController extends FoodValidator {
 
     private repository: IFoodRepository
 
-    constructor(repository: IFoodRepository){
+    constructor(repository: IFoodRepository) {
         super()
         this.repository = repository
     }
@@ -30,8 +30,15 @@ class FoodController extends FoodValidator{
     }
 
     async store(req: Request, res: Response) {
+        if (!req.file) {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                errros: {
+                    default: 'A imagem é obrigatória'
+                }
+            })
+        }
 
-        const result = await this.repository.create(req.body)
+        const result = await this.repository.create(req.body, req.file.filename)
 
         if (result instanceof Error) {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

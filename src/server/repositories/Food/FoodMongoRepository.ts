@@ -28,10 +28,10 @@ class FoodMongoRepository implements IFoodRepository{
 
     }   
     
-    async create(dataFood: Omit<IFood,'id'>): Promise<string | Error>{
+    async create(dataFood: Omit<IFood,'id'>, filename: string): Promise<string | Error>{
 
         try {
-            const result = await Food.create(dataFood)
+            const result = await Food.create({...dataFood, path_image: filename})
 
             return result._id.toString()
         } catch (error) {
