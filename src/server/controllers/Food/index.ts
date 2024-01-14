@@ -1,13 +1,17 @@
 import { Request, Response } from 'express'
 import { IFoodRepository } from '../../repositories/Food/protocols'
 import { StatusCodes } from 'http-status-codes'
+import { FoodValidator } from './FoodValidator'
 
 
-class FoodController {
+class FoodController extends FoodValidator{
 
-    constructor(
-        private repository: IFoodRepository
-    ) { }
+    private repository: IFoodRepository
+
+    constructor(repository: IFoodRepository){
+        super()
+        this.repository = repository
+    }
 
     async index(req: Request, res: Response) {
 
