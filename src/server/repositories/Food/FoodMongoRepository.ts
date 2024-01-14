@@ -28,9 +28,18 @@ class FoodMongoRepository implements IFoodRepository{
 
     }   
     
-    // async create(dataFood: Omit<IFood,'id'>): Promise<string | Error>{
+    async create(dataFood: Omit<IFood,'id'>): Promise<string | Error>{
 
-    // }
+        try {
+            const result = await Food.create(dataFood)
+
+            return result._id.toString()
+        } catch (error) {
+            console.log(error)
+            return new Error('Erro ao criar nova Food')
+        }
+
+    }
 
     // async update(foodId: string, newData: Partial<Omit<IFood, 'id'>>): Promise<void | Error>{
 
