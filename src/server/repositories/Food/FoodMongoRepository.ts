@@ -56,6 +56,21 @@ class FoodMongoRepository implements IFoodRepository {
             return new Error(`Erro ao atualizar Food de id ${foodId}`)
         }
     }
+    
+    async delete(foodId: string): Promise<void | Error>{
+
+        if (!await this.verifyFoodExistsById(foodId)) {
+            return new Error(`Food de id ${foodId} não existe`)
+        }
+
+        try {
+            await Food.findByIdAndDelete(foodId)
+        } catch (error) {
+            console.log(error)
+            return new Error(`Erro ao deletar Food de id ${foodId}`)
+        }
+
+    }
 
     async verifyFoodExistsById(foodId: string): Promise<boolean> {
         try {
@@ -70,9 +85,6 @@ class FoodMongoRepository implements IFoodRepository {
         }
     }
 
-    // async delete(foodId: string): Promise<void | Error>{
-
-    // }
 
 }
 

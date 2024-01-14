@@ -31,7 +31,7 @@ class FoodController extends FoodValidator {
 
     async store(req: Request, res: Response) {
         if (!req.file) {
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+            return res.status(StatusCodes.BAD_REQUEST).json({
                 errros: {
                     default: 'A imagem é obrigatória'
                 }
@@ -53,13 +53,42 @@ class FoodController extends FoodValidator {
     }
 
     async edit(req: Request, res: Response) {
-        if (!req.params.id) return
+        if (!req.params.id) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                errros: {
+                    default: 'O id é obrigatório'
+                }
+            })
+        }
 
         const result = await this.repository.update(req.params.id, req.body, req.file?.filename)
 
         if (result instanceof Error) {
             return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 errros: {
+                    default: result.message
+                }
+            })
+        }
+
+        res.status(StatusCodes.NO_CONTENT).send()
+
+    }
+
+    async destroy(req: Request, res: Response) {
+        if (!req.params.id) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                errros: {
+                    default: 'O id é obrigatório'
+                }
+            })
+        }
+
+        const result = await this.repository.delete(req.params.id)
+
+        if (result instanceof Error) {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                errors: {
                     default: result.message
                 }
             })

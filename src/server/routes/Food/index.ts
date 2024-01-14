@@ -22,4 +22,8 @@ router.put('/:id', upload.single('file'), foodController.editValidation, async(r
     await foodController.edit(req,res)
 })
 
+router.delete('/:id', async(req,res) => {
+    await foodController.destroy(req,res)
+})
+
 export { router as foodRoutes }
