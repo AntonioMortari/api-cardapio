@@ -18,4 +18,8 @@ router.post('/', upload.single('file') ,foodController.storeValidation, async (r
     await foodController.store(req, res)
 })
 
+router.put('/:id', upload.single('file'), foodController.editValidation, async(req,res) => {
+    await foodController.edit(req,res)
+})
+
 export { router as foodRoutes }

@@ -1,10 +1,14 @@
 import { NextFunction, Request, Response } from 'express'
 import { validator } from '../../middlewares/Validator'
-import { bodyValidator } from '../../validations/Food'
+import { bodyEditValidator, bodyStoreValidator } from '../../validations/Food'
 
 
 const storeValidationMiddleware = validator({
-    body: bodyValidator
+    body: bodyStoreValidator
+})
+
+const editValidationMiddleware = validator({
+    body: bodyEditValidator
 })
 
 abstract class FoodValidator{
@@ -12,6 +16,11 @@ abstract class FoodValidator{
     storeValidation(req: Request, res: Response, next: NextFunction){
         storeValidationMiddleware(req,res,next)
     }
+
+    editValidation(req: Request, res: Response, next: NextFunction){
+        editValidationMiddleware(req,res,next)
+    }
+    
 
 
 }

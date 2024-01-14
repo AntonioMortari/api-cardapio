@@ -52,6 +52,23 @@ class FoodController extends FoodValidator {
 
     }
 
+    async edit(req: Request, res: Response) {
+        if (!req.params.id) return
+
+        const result = await this.repository.update(req.params.id, req.body, req.file?.filename)
+
+        if (result instanceof Error) {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                errros: {
+                    default: result.message
+                }
+            })
+        }
+
+        res.status(StatusCodes.NO_CONTENT).send()
+
+    }
+
 
 }
 

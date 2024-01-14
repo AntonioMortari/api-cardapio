@@ -3,13 +3,13 @@ import { IFood } from '../../models/Food/protocols'
 import { IFoodRepository } from './protocols'
 
 
-class FoodMongoRepository implements IFoodRepository{
+class FoodMongoRepository implements IFoodRepository {
 
-    async getAll(): Promise<IFood[] | Error>{
+    async getAll(): Promise<IFood[] | Error> {
 
         try {
             const result = await Food.find()
-            
+
             const foods: IFood[] = result.map(food => {
                 return {
                     id: food._id.toString(),
@@ -26,12 +26,12 @@ class FoodMongoRepository implements IFoodRepository{
             return new Error('Erro ao buscar todas as Foods')
         }
 
-    }   
-    
-    async create(dataFood: Omit<IFood,'id'>, filename: string): Promise<string | Error>{
+    }
+
+    async create(dataFood: Omit<IFood, 'id'>, filename: string): Promise<string | Error> {
 
         try {
-            const result = await Food.create({...dataFood, path_image: filename})
+            const result = await Food.create({ ...dataFood, path_image: filename })
 
             return result._id.toString()
         } catch (error) {
@@ -41,9 +41,34 @@ class FoodMongoRepository implements IFoodRepository{
 
     }
 
-    // async update(foodId: string, newData: Partial<Omit<IFood, 'id'>>): Promise<void | Error>{
+    async update(foodId: string, newData: Partial<Omit<IFood, 'id'>>, filename?: string): Promise<void | Error> {
+        if (!await this.verifyFoodExistsById(foodId)) {
+            return new Error(`Food de id ${foodId} não existe`)
+        }
 
-    // }
+        try {
+            await Food.findByIdAndUpdate(foodId, {
+                ...newData,
+                path_image: filename && filename
+            })
+        } catch (error) {
+            console.log(error)
+            return new Error(`Erro ao atualizar Food de id ${foodId}`)
+        }
+    }
+
+    async verifyFoodExistsById(foodId: string): Promise<boolean> {
+        try {
+            const food = await Food.findOne({ _id: foodId })
+
+            if (food) return true
+
+            return false
+        } catch (error) {
+            console.log(error)
+            return false
+        }
+    }
 
     // async delete(foodId: string): Promise<void | Error>{
 
@@ -51,4 +76,4 @@ class FoodMongoRepository implements IFoodRepository{
 
 }
 
-export { FoodMongoRepository}
+export { FoodMongoRepository }
