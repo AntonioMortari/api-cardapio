@@ -17,14 +17,6 @@ class FoodController extends FoodValidator {
 
         const result = await this.repository.getAll()
 
-        if (result instanceof Error) {
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                errros: {
-                    default: result.message
-                }
-            })
-        }
-
         return res.status(StatusCodes.OK).json(result)
 
     }
@@ -40,14 +32,6 @@ class FoodController extends FoodValidator {
 
         const result = await this.repository.create(req.body, req.file.filename)
 
-        if (result instanceof Error) {
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                errros: {
-                    default: result.message
-                }
-            })
-        }
-
         return res.status(StatusCodes.CREATED).json(result)
 
     }
@@ -61,18 +45,9 @@ class FoodController extends FoodValidator {
             })
         }
 
-        const result = await this.repository.update(req.params.id, req.body, req.file?.filename)
-
-        if (result instanceof Error) {
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                errros: {
-                    default: result.message
-                }
-            })
-        }
+        await this.repository.update(req.params.id, req.body, req.file?.filename)
 
         res.status(StatusCodes.NO_CONTENT).send()
-
     }
 
     async destroy(req: Request, res: Response) {
@@ -84,15 +59,7 @@ class FoodController extends FoodValidator {
             })
         }
 
-        const result = await this.repository.delete(req.params.id)
-
-        if (result instanceof Error) {
-            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-                errors: {
-                    default: result.message
-                }
-            })
-        }
+        await this.repository.delete(req.params.id)
 
         res.status(StatusCodes.NO_CONTENT).send()
 
